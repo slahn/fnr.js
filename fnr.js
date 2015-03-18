@@ -42,15 +42,15 @@
 		var dobstr = (number+'').substring(0,6); //coerce to string, take date digits
 		var first = dobstr.charAt(0);
 		
-		// the old, invalid kind of H-number starts with 8 or 9.
+		// A cross-institution H-number (FH-number) starts with 8 or 9.
 		// We can't really find the DOB from this number, so we won't try.
 		// These numbers really shouldn't be used.
 		// Return invalid for now.
 		if(first == '8' || first == '9') {
 			return {
 				valid: false,
-				error: "Unsupported, old-style H-number.",
-				type: 'H',
+				error: "FH-numbers are not supported yeat.",
+				type: 'FH',
 				dateOfBirth: null
 			};
 		}
@@ -80,7 +80,7 @@
 		//d) … 2000-2039, uses 999-500.
 
 		//Rule A
-		if(year > 54 && century >= 500 && century < 750) {
+		if(year >= 54 && century >= 500 && century < 750) {
 			year = 1800 + year;
 		}
 		// rule B
