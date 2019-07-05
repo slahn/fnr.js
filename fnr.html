@@ -2,18 +2,43 @@
 <html>
 <head>
 <meta charset='utf-8'>
-<title>Fødselsnummer</title>
+<title>Fødselsnummer i Javascript</title>
 <script type="text/javascript" src="fnr.js"></script>
+<style type="text/css">
+body {
+	margin:40px auto;
+	max-width:650px;
+	line-height:1.6;
+	font-size:18px;
+	color:#444;
+	padding:0 10px;
+}
+h1,h2,h3{line-height:1.2}
+</style>
 </head>
 <body>
 
-<label>
+<h1>Generer fødselsnummer, eller kontroller et eksisterende</h1>
+<p><strong>Advarsel! Ikke skriv inn ekte fødselsnummer på ukjente sider på nett, for eksempel her.</strong>
+	Last ned og sjekk at koden ikke kontakter noen 3.part, og kjør den deretter lokalt.</p>
+
+<p>Fødselsnummer som genereres under, er matematisk gyldige, men tilfeldige. Det er mulig at de allerede er tildelt ekte personer. Eller at de ikke er det.</p>
+
+<p>For å generere et nummer, fyll ut ønsket fødselsdato, og trykk knapp for ønsket nummertype. Hvis du lar fødselsdato være blank, vil det genereres en tilfeldig dato, også.</p>
+<div>
+	<label>Dato
+		<input id="dob" type="date" value="" min="1854-01-01" max="2039-12-31">
+		</label>
+	<button id="generate-random">Tilfeldig</button>
+	<button id="generate-random-d">Tilfeldig D-nummer</button>
+	<button id="generate-random-h">Tilfeldig H-nummer</button>
+</div>
+<div>
+		<label>
 	Fødselsnummer:
 	<input id="fnr">
-</label>
-<button id="generate-random">Tilfeldig</button>
-<button id="generate-random-d">Tilfeldig D-nummer</button>
-<button id="generate-random-h">Tilfeldig H-nummer</button>
+	</label>
+</div>
 <div>	
 	<pre id="results">
 	</pre>
@@ -37,7 +62,14 @@ function setCurrentNumberInfo(info) {
 }
 
 function generateRandomNumber(type, sex) {
-	var nr = Fnr.generateRandom(type, sex);
+
+	var dob = null;
+	var dobInput = document.getElementById("dob");
+	if(dobInput && dobInput.value) {
+		dob = new Date(dobInput.value);
+	}
+
+	var nr = Fnr.generateRandom(type, sex, dob);
 	if(nr != null) {
 		document.getElementById("fnr").value = nr;
 		var info = Fnr.info(nr);

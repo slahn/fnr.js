@@ -202,7 +202,7 @@
 		return number;
 	};
 
-	Fnr.generateRandom = function(type, sex) {
+	Fnr.generateRandom = function(type, sex, birthDate) {
 		if(!type) {
 			type = "N";
 		}
@@ -211,16 +211,18 @@
 			sex = (Math.random() >= 0.5) ? "M" : "F";
 		}
 
+		if(!birthDate) {
+			// Find a random date after 1900
+			var today = new Date();
+			var thisYear = today.getFullYear();
 
-		// Find a random date after 1900
-		var today = new Date();
-		var thisYear = today.getFullYear();
+			var year = Math.floor(Math.random() * (thisYear-1900)) + 1900;
+			var day = Math.floor(Math.random()*365)+1;
 
-		var year = Math.floor(Math.random() * (thisYear-1900)) + 1900;
-		var day = Math.floor(Math.random()*365)+1;
-
-		var birthDate = new Date(year,0,0);
-		birthDate.setDate(day);
+			var birthDate = new Date(year,0,0);
+			birthDate.setDate(day);
+		}
+		
 
 		var dateParts = [
 			padNumber(birthDate.getDate(), 2),
@@ -242,7 +244,10 @@
 			//random personal num in range 000-999
 			var num = Math.floor(Math.random() * 1000);
 			fnr = Fnr.generateControlDigits(dateString + padNumber(num +'', 3));
-			if(fnr != null && !Fnr.validate(fnr)) {
+			var info = Fnr.info(fnr);
+
+			if(fnr != null && 
+				(!info.valid || info.dateOfBirth.getFullYear() != birthDate.getFullYear())) {
 				fnr = null;
 			}
 			tries++;
